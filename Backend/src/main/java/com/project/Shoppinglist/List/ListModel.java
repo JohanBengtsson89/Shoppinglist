@@ -12,18 +12,20 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@Table(name = "shopping_list")
 public class ListModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "list_id")
     private Long id;
 
     @Column(name = "list_name")
     private String listName;
 
-    @ManyToMany
-    @Column(name = "items")
-    private List<ItemModel> item;
+
+    /*@Column(name = "items")
+    private List<ItemModel> item;*/
 
     private ListModel(){};
 

@@ -1,7 +1,6 @@
 package com.project.Shoppinglist.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,11 +9,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "UserModel")
 public class UserModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "user_name")
     private String userName;
+
+    @Column(name = "password")
     private String password;
 
 }

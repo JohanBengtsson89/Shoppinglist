@@ -10,7 +10,6 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    /*public List<Integer> getAllItems;*/
 
     @Autowired
     public ItemService(ItemRepository itemRepository) {
@@ -20,5 +19,9 @@ public class ItemService {
 
     public List<ItemModel> getAllItems() {
         return itemRepository.findAll();
+    }
+
+    public ItemModel createItem(ItemModel item) {
+        return itemRepository.save(item);
     }
 }
