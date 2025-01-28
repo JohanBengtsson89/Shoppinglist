@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
-@Getter
-@Setter
-@Table(name = "UserModel")
+@Table(name = "User_table")
 public class UserModel {
 
     @Id
@@ -22,4 +19,30 @@ public class UserModel {
     @Column(name = "password")
     private String password;
 
+    public UserModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
