@@ -21,11 +21,11 @@ public class ListModel {
     @Column(name = "list_name")
     private String listName;
 
-
+// test
     /*@Column(name = "items")
     private List<ItemModel> item;*/
 
-    private ListModel(){};
+    public ListModel(){};
 
     public Long getId() {
         return id;
