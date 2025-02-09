@@ -27,6 +27,10 @@ public class ListModel {
 
     public ListModel(){};
 
+    public ListModel(String listName) {
+        this.listName = listName;
+    }
+
     public Long getId() {
         return id;
     }
