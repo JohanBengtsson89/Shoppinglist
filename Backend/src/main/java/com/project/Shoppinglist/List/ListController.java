@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/list")
@@ -22,6 +23,11 @@ public class ListController {
     @GetMapping("/all")
     public List<ListModel> getAllLists() {
         return listService.getAllLists();
+    }
+
+    @GetMapping("/getByID/{id}")
+    public Optional<ListModel> findById(@RequestParam Long id) {
+        return listService.findById(id);
     }
 
     @PostMapping("/post")
