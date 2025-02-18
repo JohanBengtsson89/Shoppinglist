@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -23,5 +24,13 @@ public class ItemService {
 
     public ItemModel createItem(ItemModel item) {
         return itemRepository.save(item);
+    }
+
+    public void deleteById(Long id) {
+        itemRepository.deleteById(id);
+    }
+
+    public Optional<ItemModel> getById(Long id) {
+        return itemRepository.findById(id);
     }
 }

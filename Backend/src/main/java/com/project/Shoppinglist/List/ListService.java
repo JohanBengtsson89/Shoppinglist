@@ -1,5 +1,6 @@
 package com.project.Shoppinglist.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,8 +11,13 @@ public class ListService {
 
     private final ListRepository listRepository;
 
+    @Autowired
     public ListService(ListRepository listRepository) {
         this.listRepository = listRepository;
+    }
+
+    public void deleteById(Long id) {
+        listRepository.deleteById(id);
     }
 
     public List<ListModel> getAllLists() {
