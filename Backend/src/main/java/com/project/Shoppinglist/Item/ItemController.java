@@ -4,12 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/item")
@@ -26,15 +28,15 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/")
-    public String index(){
-        return "Tjenare";
-    }
-
     @GetMapping("/get")
     public List<ItemModel> getItems(){
         log.info("Fetching all items...");
         return itemService.getAllItems();
+    }
+
+    @GetMapping("getById/{id}")
+    public Optional<ItemModel> getById(@RequestParam Long id) {
+        return itemService.getById(id);
     }
 
     @PostMapping("/post")
@@ -46,6 +48,12 @@ public class ItemController {
 
         log.info("Item saved: {}", savedItem);  // Log the saved item
         return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public String deleteById(@RequestParam Long id) {
+        itemService.deleteById(id);
+        return "Successfully deleted";
     }
 
 
