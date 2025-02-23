@@ -21,15 +21,11 @@ public class ListModel {
     @Column(name = "list_name")
     private String listName;
 
-// test
-    /*@Column(name = "items")
-    private List<ItemModel> item;*/
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "list")
+    private List<ItemModel> items;
 
-    public ListModel(){};
-
-    public ListModel(String listName) {
-        this.listName = listName;
-    }
+    public ListModel() {
+    };
 
     public Long getId() {
         return id;
@@ -46,4 +42,13 @@ public class ListModel {
     public void setListName(String listName) {
         this.listName = listName;
     }
+
+    public List<ItemModel> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemModel> items) {
+        this.items = items;
+    }
 }
+
