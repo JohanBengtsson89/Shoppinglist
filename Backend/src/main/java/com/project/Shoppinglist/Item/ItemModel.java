@@ -1,6 +1,7 @@
 package com.project.Shoppinglist.Item;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.Shoppinglist.List.ListModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +28,9 @@ public class ItemModel {
     @Column(name = "date_of_last_purchase")
     private LocalDate dateOfLastPurchase;
 
-    // private ItemModel(){};
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shopping_list_id")
+    private ListModel list;
 
 
     public Long getId() {
@@ -52,5 +55,13 @@ public class ItemModel {
 
     public void setDateOfLastPurchase(LocalDate dateOfLastPurchase) {
         this.dateOfLastPurchase = dateOfLastPurchase;
+    }
+
+    public ListModel getList() {
+        return list;
+    }
+
+    public void setList(ListModel list) {
+        this.list = list;
     }
 }
