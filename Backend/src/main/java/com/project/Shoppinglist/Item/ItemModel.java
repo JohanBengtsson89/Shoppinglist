@@ -1,5 +1,6 @@
 package com.project.Shoppinglist.Item;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.Shoppinglist.List.ListModel;
 import jakarta.persistence.*;
@@ -14,6 +15,8 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "items")
 public class ItemModel {
 
@@ -28,40 +31,8 @@ public class ItemModel {
     @Column(name = "date_of_last_purchase")
     private LocalDate dateOfLastPurchase;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "shopping_list_id")
-    private ListModel list;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public LocalDate getDateOfLastPurchase() {
-        return dateOfLastPurchase;
-    }
-
-    public void setDateOfLastPurchase(LocalDate dateOfLastPurchase) {
-        this.dateOfLastPurchase = dateOfLastPurchase;
-    }
-
-    public ListModel getList() {
-        return list;
-    }
-
-    public void setList(ListModel list) {
-        this.list = list;
-    }
+    @JsonBackReference
+    private ListModel shoppingList;
 }
