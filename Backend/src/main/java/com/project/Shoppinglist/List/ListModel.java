@@ -1,15 +1,20 @@
 package com.project.Shoppinglist.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.Shoppinglist.Item.ItemModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "shopping_list")
 public class ListModel {
 
@@ -21,29 +26,9 @@ public class ListModel {
     @Column(name = "list_name")
     private String listName;
 
-// test
-    /*@Column(name = "items")
-    private List<ItemModel> item;*/
+    @OneToMany(mappedBy = "shoppingList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ItemModel> items;
 
-    public ListModel(){};
-
-    public ListModel(String listName) {
-        this.listName = listName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getListName() {
-        return listName;
-    }
-
-    public void setListName(String listName) {
-        this.listName = listName;
-    }
 }
+

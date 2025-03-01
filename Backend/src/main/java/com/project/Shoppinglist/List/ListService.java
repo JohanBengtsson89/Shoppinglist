@@ -1,5 +1,6 @@
 package com.project.Shoppinglist.List;
 
+import com.project.Shoppinglist.Item.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,12 @@ public class ListService {
 
     private final ListRepository listRepository;
 
+    private final ItemRepository itemRepository;
+
     @Autowired
-    public ListService(ListRepository listRepository) {
+    public ListService(ListRepository listRepository, ItemRepository itemRepository) {
         this.listRepository = listRepository;
+        this.itemRepository = itemRepository;
     }
 
     public void deleteById(Long id) {
