@@ -2,16 +2,31 @@ import { useState } from "react";
 import "./App.css";
 import { useEffect } from "react";
 
+interface Item {
+  id: number;
+  itemName: string;
+  dateOfLastPurchase: string;
+  shoppingList: string;
+}
+
+interface ShoppingList {
+  id: number;
+  listName: string;
+  items: Item[];
+}
+
 function App() {
-  const [items, setItems] = useState(["Mjölk", "Bröd", "Smör"]);
+  const [items, setItems] = useState<Item[]>([]);
   const [newItem, setNewItem] = useState("");
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch("https://api.example.com/items");
-        const data = await response.json();
-        setItems(data);
+        const response = await fetch(
+          "http://localhost:8080/api/list/getByID/{id}?id=1"
+        );
+        const data: ShoppingList = await response.json();
+        setItems(data.items);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -22,7 +37,13 @@ function App() {
 
   const handleAddItem = () => {
     if (newItem.trim() !== "") {
-      setItems([...items, newItem]);
+      const newItemObject: Item = {
+        id: items.length + 1,
+        itemName: newItem,
+        dateOfLastPurchase: new Date().toISOString().split("T")[0],
+        shoppingList: "",
+      };
+      setItems([...items, newItemObject]);
       setNewItem("");
     }
   };
@@ -33,6 +54,16 @@ function App() {
         <header className="App-header">
           <h1>Inköpslista</h1>
         </header>
+        <div style={{ marginTop: "10px" }}>
+          <input
+            type="text"
+            value={newItem}
+            onChange={(e) => setNewItem(e.target.value)}
+            placeholder="Lägg till ny vara"
+            style={{ marginRight: "5px" }}
+          />
+          <button onClick={handleAddItem}>+</button>
+        </div>
 
         <div
           style={{
@@ -51,28 +82,18 @@ function App() {
             }}
           >
             <ul style={{ listStyleType: "none", padding: 0 }}>
-              {items.map((item, index) => (
-                <li key={index}>
-                  <input type="checkbox" id={`item-${index}`} />
+              {items.map((item) => (
+                <li key={item.id}>
+                  <input type="checkbox" id={`item-${item.id}`} />
                   <label
-                    htmlFor={`item-${index}`}
+                    htmlFor={`item-${item.id}`}
                     style={{ marginLeft: "5px" }}
                   >
-                    {item}
+                    {item.itemName}
                   </label>
                 </li>
               ))}
             </ul>
-          </div>
-          <div style={{ marginTop: "10px" }}>
-            <input
-              type="text"
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Lägg till ny vara"
-              style={{ marginRight: "5px" }}
-            />
-            <button onClick={handleAddItem}>+</button>
           </div>
         </div>
       </div>
