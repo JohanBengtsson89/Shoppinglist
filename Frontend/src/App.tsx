@@ -3,21 +3,22 @@ import "./App.css";
 import { useEffect } from "react";
 
 interface Item {
-  id: number;
+  id?: number;
   itemName: string;
-  dateOfLastPurchase: string;
-  shoppingList: string;
+  dateOfLastPurchase?: string;
+  shoppingList?: ShoppingList;
 }
 
 interface ShoppingList {
   id: number;
-  listName: string;
-  items: Item[];
+  listName?: string;
+  items?: Item[];
 }
 
 function App() {
   const [items, setItems] = useState<Item[]>([]);
   const [newItem, setNewItem] = useState("");
+  const [shoppingList, setShoppingList] = useState<ShoppingList | null>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -26,7 +27,8 @@ function App() {
           "http://localhost:8080/api/list/getByID/{id}?id=1"
         );
         const data: ShoppingList = await response.json();
-        setItems(data.items);
+        setShoppingList(data);
+        setItems(data.items || []);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -35,16 +37,31 @@ function App() {
     fetchItems();
   }, []);
 
-  const handleAddItem = () => {
+  const handleAddItem = async () => {
     if (newItem.trim() !== "") {
       const newItemObject: Item = {
-        id: items.length + 1,
         itemName: newItem,
         dateOfLastPurchase: new Date().toISOString().split("T")[0],
-        shoppingList: "",
+        shoppingList: {
+          id: 1,
+        },
       };
       setItems([...items, newItemObject]);
       setNewItem("");
+      try {
+        const response = await fetch(`http://localhost:8080/api/item/post`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newItemObject),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to add item");
+        }
+      } catch (error) {
+        console.error("Error adding item:", error);
+      }
     }
   };
 
