@@ -43,9 +43,7 @@ public class ItemController {
     public ResponseEntity<ItemModel> createItem(@RequestBody ItemModel item) {
         // Log the incoming item object for debugging
         log.info("Received item: {}", item);
-
         ItemModel savedItem = itemService.createItem(item);
-
         log.info("Item saved: {}", savedItem);  // Log the saved item
         return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
     }

@@ -30,5 +30,10 @@ public class ListModel {
     @JsonManagedReference
     private List<ItemModel> items;
 
+    public void addItem(ItemModel item) {
+        items.add(item);
+        item.setShoppingList(this);
+    }
+
 }
 
