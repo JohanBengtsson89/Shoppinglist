@@ -1,6 +1,7 @@
 package com.project.Shoppinglist.List;
 
 
+import com.project.Shoppinglist.Item.ItemModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,11 @@ public class ListController {
     public ResponseEntity<ListModel> createList(@RequestBody ListModel list) {
         ListModel savedList = listService.createList(list);
         return new ResponseEntity<>(savedList, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/additem/{listID}")
+    public ResponseEntity<ListModel> addItem(@RequestBody ItemModel item, @PathVariable Long listID) {
+        return listService.addItem(item, listID);
     }
 
     @DeleteMapping("/delete/{id}")

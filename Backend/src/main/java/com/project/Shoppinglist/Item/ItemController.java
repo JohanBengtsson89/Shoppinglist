@@ -43,9 +43,7 @@ public class ItemController {
     public ResponseEntity<ItemModel> createItem(@RequestBody ItemModel item) {
         // Log the incoming item object for debugging
         log.info("Received item: {}", item);
-
         ItemModel savedItem = itemService.createItem(item);
-
         log.info("Item saved: {}", savedItem);  // Log the saved item
         return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
     }
@@ -54,6 +52,14 @@ public class ItemController {
     public String deleteById(@RequestParam Long id) {
         itemService.deleteById(id);
         return "Successfully deleted";
+    }
+
+    @DeleteMapping("delete/list")
+    public String deleteItemsList(@RequestBody List<Long> itemIDs) {
+        for (Long item : itemIDs) {
+            itemService.deleteById(item);
+        }
+        return "Successfully deleted shopping list";
     }
 
 

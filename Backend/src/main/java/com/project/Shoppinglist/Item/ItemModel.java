@@ -2,6 +2,7 @@ package com.project.Shoppinglist.Item;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.Shoppinglist.List.ListModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
