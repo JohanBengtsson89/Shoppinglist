@@ -1,9 +1,12 @@
 import { useState } from "react";
-import "./App.css";
+// import "./App.css";
 import { useEffect } from "react";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 interface Item {
-  id?: number;
+  id: number;
   itemName: string;
   dateOfLastPurchase?: string;
   shoppingList?: ShoppingList;
@@ -39,15 +42,13 @@ function App() {
 
   const handleAddItem = async () => {
     if (newItem.trim() !== "") {
-      const newItemObject: Item = {
+      const newItemObject = {
         itemName: newItem,
         dateOfLastPurchase: new Date().toISOString().split("T")[0],
         shoppingList: {
           id: 1,
         },
       };
-      setItems([...items, newItemObject]);
-      setNewItem("");
       try {
         const response = await fetch(`http://localhost:8080/api/item/post`, {
           method: "POST",
@@ -59,27 +60,70 @@ function App() {
         if (!response.ok) {
           throw new Error("Failed to add item");
         }
+        const savedItem: Item = await response.json();
+        setItems([...items, savedItem]);
+        setNewItem("");
       } catch (error) {
         console.error("Error adding item:", error);
       }
     }
   };
 
+  const handleDeleteItem = async () => {
+    const checkedItems = document.querySelectorAll(
+      'input[type="checkbox"]:checked'
+    );
+    const checkedItemIds = Array.from(checkedItems).map((item) =>
+      parseInt(item.id.split("-")[1])
+    );
+
+    const newItems = items.filter((item) => !checkedItemIds.includes(item.id!));
+    setItems(newItems);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/item/delete/list`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(checkedItemIds),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete item");
+      }
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
   return (
     <>
-      <div className="App" style={{ padding: "20px" }}>
-        <header className="App-header">
+      <div style={{ padding: "20px" }}>
+        <header>
           <h1>Inköpslista</h1>
         </header>
-        <div style={{ marginTop: "10px" }}>
-          <input
+        <div
+          style={{
+            //height: "55px",
+            //marginTop: "10px",
+            display: "flex",
+            width: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <TextField
+            style={{ width: "50%", marginRight: "10px" }}
             type="text"
             value={newItem}
             onChange={(e) => setNewItem(e.target.value)}
             placeholder="Lägg till ny vara"
-            style={{ marginRight: "5px" }}
           />
-          <button onClick={handleAddItem}>+</button>
+          <Button variant="contained" onClick={handleAddItem}>
+            Lägg till
+          </Button>
         </div>
 
         <div
@@ -90,12 +134,12 @@ function App() {
             alignItems: "center",
           }}
         >
-          <div
+          <Paper
+            elevation={3}
             style={{
-              backgroundColor: "grey",
-              border: "1px solid white",
-              padding: "10px",
-              width: "300px",
+              width: "90%",
+              padding: "20px",
+              margin: "20px 0px 20px 0px",
             }}
           >
             <ul style={{ listStyleType: "none", padding: 0 }}>
@@ -111,7 +155,14 @@ function App() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Paper>
+          <Button
+            variant="contained"
+            onClick={handleDeleteItem}
+            style={{ height: "50px", width: "100px" }}
+          >
+            Markera klar
+          </Button>
         </div>
       </div>
     </>

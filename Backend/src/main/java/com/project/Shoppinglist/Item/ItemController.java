@@ -54,5 +54,13 @@ public class ItemController {
         return "Successfully deleted";
     }
 
+    @DeleteMapping("delete/list")
+    public String deleteItemsList(@RequestBody List<Long> itemIDs) {
+        for (Long item : itemIDs) {
+            itemService.deleteById(item);
+        }
+        return "Successfully deleted shopping list";
+    }
+
 
 }
