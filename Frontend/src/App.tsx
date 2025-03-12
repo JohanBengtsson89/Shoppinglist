@@ -1,9 +1,13 @@
 import { useState } from "react";
-// import "./App.css";
 import { useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { Amplify } from "aws-amplify";
+import awsExports from "./aws-exports";
+import { Authenticator } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 interface Item {
   id: number;
@@ -17,6 +21,9 @@ interface ShoppingList {
   listName?: string;
   items?: Item[];
 }
+
+Amplify.configure({ ...awsExports });
+let token = (await fetchAuthSession()).tokens?.idToken?.toString();
 
 function App() {
   const [items, setItems] = useState<Item[]>([]);
@@ -101,70 +108,90 @@ function App() {
 
   return (
     <>
-      <div style={{ padding: "20px" }}>
-        <header>
-          <h1>Inköpslista</h1>
-        </header>
-        <div
-          style={{
-            //height: "55px",
-            //marginTop: "10px",
-            display: "flex",
-            width: "100%",
-            justifyContent: "center",
-          }}
-        >
-          <TextField
-            style={{ width: "50%", marginRight: "10px" }}
-            type="text"
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            placeholder="Lägg till ny vara"
-          />
-          <Button variant="contained" onClick={handleAddItem}>
-            Lägg till
-          </Button>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Paper
-            elevation={3}
+      <Authenticator>
+        {({ signOut }) => (
+          <div
             style={{
-              width: "90%",
-              padding: "20px",
-              margin: "20px 0px 20px 0px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <ul style={{ listStyleType: "none", padding: 0 }}>
-              {items.map((item) => (
-                <li key={item.id}>
-                  <input type="checkbox" id={`item-${item.id}`} />
-                  <label
-                    htmlFor={`item-${item.id}`}
-                    style={{ marginLeft: "5px" }}
-                  >
-                    {item.itemName}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </Paper>
-          <Button
-            variant="contained"
-            onClick={handleDeleteItem}
-            style={{ height: "50px", width: "100px" }}
-          >
-            Markera klar
-          </Button>
-        </div>
-      </div>
+            <header>
+              <h1>Inköpslista</h1>
+            </header>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+              }}
+            >
+              <TextField
+                style={{ width: "50%", marginRight: "10px" }}
+                type="text"
+                value={newItem}
+                onChange={(e) => setNewItem(e.target.value)}
+                placeholder="Lägg till ny vara"
+              />
+              <Button variant="contained" onClick={handleAddItem}>
+                Lägg till
+              </Button>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                width: "80%",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Paper
+                elevation={3}
+                style={{
+                  width: "90%",
+                  minHeight: "200px",
+                  padding: "20px",
+                  margin: "20px 0px 20px 0px",
+                }}
+              >
+                <ul style={{ listStyleType: "none", padding: 0 }}>
+                  {items.map((item) => (
+                    <li key={item.id}>
+                      <input type="checkbox" id={`item-${item.id}`} />
+                      <label
+                        htmlFor={`item-${item.id}`}
+                        style={{ marginLeft: "5px" }}
+                      >
+                        {item.itemName}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </Paper>
+              <Button
+                variant="contained"
+                onClick={handleDeleteItem}
+                style={{ height: "50px", width: "100px" }}
+              >
+                Markera klar
+              </Button>
+              <Button
+                style={{
+                  marginTop: "20px",
+                  color: "Black",
+                  backgroundColor: "red",
+                }}
+                onClick={signOut}
+              >
+                Sign out
+              </Button>
+            </div>
+          </div>
+        )}
+      </Authenticator>
     </>
   );
 }
