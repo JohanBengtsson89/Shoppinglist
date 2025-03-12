@@ -23,18 +23,42 @@ interface ShoppingList {
 }
 
 Amplify.configure({ ...awsExports });
-let token = (await fetchAuthSession()).tokens?.idToken?.toString();
+// let token = (await fetchAuthSession()).tokens?.idToken?.toString();
 
 function App() {
   const [items, setItems] = useState<Item[]>([]);
   const [newItem, setNewItem] = useState("");
   const [shoppingList, setShoppingList] = useState<ShoppingList | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
+    // ✅ Fetch JWT token when component mounts
+    const getToken = async () => {
+      try {
+        const session = await fetchAuthSession();
+        const accessToken = session.tokens?.accessToken?.toString();
+        setToken(accessToken || null);
+      } catch (error) {
+        console.error("Error fetching token:", error);
+      }
+    };
+
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    if (!token) return; // Wait for token before fetching data
     const fetchItems = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/api/list/getByID/{id}?id=1"
+          "http://localhost:8080/api/list/getByID/{id}?id=1",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         const data: ShoppingList = await response.json();
         setShoppingList(data);
@@ -60,8 +84,10 @@ function App() {
         const response = await fetch(`http://localhost:8080/api/item/post`, {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify(newItemObject),
         });
         if (!response.ok) {
