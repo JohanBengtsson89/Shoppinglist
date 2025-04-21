@@ -69,7 +69,7 @@ function App() {
     };
 
     fetchItems();
-  }, []);
+  }, [token]);
 
   const handleAddItem = async () => {
     if (newItem.trim() !== "") {
@@ -119,6 +119,7 @@ function App() {
         {
           method: "DELETE",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(checkedItemIds),

@@ -52,13 +52,13 @@ public class ItemController {
     }
 
     @DeleteMapping("delete/{id}")
-    public String deleteById(@RequestParam Long id) {
+    public String deleteById(@RequestParam Long id,  @AuthenticationPrincipal Jwt jwt) {
         itemService.deleteById(id);
         return "Successfully deleted";
     }
 
     @DeleteMapping("delete/list")
-    public String deleteItemsList(@RequestBody List<Long> itemIDs) {
+    public String deleteItemsList(@RequestBody List<Long> itemIDs,  @AuthenticationPrincipal Jwt jwt) {
         for (Long item : itemIDs) {
             itemService.deleteById(item);
         }
