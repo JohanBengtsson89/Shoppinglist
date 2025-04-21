@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/list")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ListController {
 
     private final ListService listService;
@@ -28,7 +31,7 @@ public class ListController {
     }
 
     @GetMapping("/getByID/{id}")
-    public Optional<ListModel> findById(@RequestParam Long id) {
+    public Optional<ListModel> findById(@RequestParam Long id, @AuthenticationPrincipal Jwt jwt) {
         return listService.findById(id);
     }
 
