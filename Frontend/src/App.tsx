@@ -28,7 +28,6 @@ Amplify.configure({ ...awsExports });
 function App() {
   const [items, setItems] = useState<Item[]>([]);
   const [newItem, setNewItem] = useState("");
-  const [shoppingList, setShoppingList] = useState<ShoppingList | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
@@ -61,7 +60,6 @@ function App() {
           }
         );
         const data: ShoppingList = await response.json();
-        setShoppingList(data);
         setItems(data.items || []);
       } catch (error) {
         console.error("Error fetching items:", error);
