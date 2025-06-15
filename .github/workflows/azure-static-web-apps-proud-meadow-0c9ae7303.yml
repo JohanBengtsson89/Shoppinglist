@@ -33,6 +33,10 @@ jobs:
                return await coredemo.getIDToken()
            result-encoding: string
 
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./Frontend
+
       - name: build
         run: npm run build
         working-directory: ./Frontend
