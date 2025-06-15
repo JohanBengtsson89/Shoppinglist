@@ -22,6 +22,9 @@ interface ShoppingList {
   items?: Item[];
 }
 
+// import base url from .env file
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 Amplify.configure({ ...awsExports });
 // let token = (await fetchAuthSession()).tokens?.idToken?.toString();
 
@@ -49,16 +52,13 @@ function App() {
     if (!token) return; // Wait for token before fetching data
     const fetchItems = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/list/getByID/{id}?id=1",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${API_BASE}api/list/getByID/{id}?id=1`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         const data: ShoppingList = await response.json();
         setItems(data.items || []);
       } catch (error) {
@@ -79,7 +79,7 @@ function App() {
         },
       };
       try {
-        const response = await fetch(`http://localhost:8080/api/item/post`, {
+        const response = await fetch(`${API_BASE}api/item/post`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -112,17 +112,14 @@ function App() {
     setItems(newItems);
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/item/delete/list`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(checkedItemIds),
-        }
-      );
+      const response = await fetch(`${API_BASE}api/item/delete/list`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(checkedItemIds),
+      });
       if (!response.ok) {
         throw new Error("Failed to delete item");
       }
