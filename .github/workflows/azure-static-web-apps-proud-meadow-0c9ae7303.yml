@@ -26,7 +26,9 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'
+      - name: Build Backend with Maven
+        working-directory: ./Backend
+        run: mvn clean package
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
       - name: Get Id Token
