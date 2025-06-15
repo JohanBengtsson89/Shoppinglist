@@ -41,11 +41,11 @@ jobs:
         run: npm run build
         working-directory: ./Frontend
         env:
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          VITE_AWS_PROJECT_REGION: ${{secrets.VITE_AWS_PROJECT_REGION}}
-          VITE_AWS_COGNITO_REGION: ${{secrets.VITE_AWS_COGNITO_REGION}}
-          VITE_AWS_USER_POOL_ID: ${{secrets.VITE_AWS_USER_POOL_ID}}
-          VITE_AWS_USER_POOL_WEB_CLIENT_ID: ${{secrets.VITE_AWS_USER_POOL_WEB_CLIENT_ID}}
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_AWS_PROJECT_REGION: ${{vars.VITE_AWS_PROJECT_REGION}}
+          VITE_AWS_COGNITO_REGION: ${{vars.VITE_AWS_COGNITO_REGION}}
+          VITE_AWS_USER_POOL_ID: ${{vars.VITE_AWS_USER_POOL_ID}}
+          VITE_AWS_USER_POOL_WEB_CLIENT_ID: ${{vars.VITE_AWS_USER_POOL_WEB_CLIENT_ID}}
         
       
       - name: Build And Deploy
