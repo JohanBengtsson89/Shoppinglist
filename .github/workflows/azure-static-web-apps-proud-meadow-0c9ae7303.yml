@@ -1,6 +1,6 @@
 name: Azure Static Web Apps CI/CD
 
-#Test3
+#Test4
 on:
   workflow_dispatch:
   push:
